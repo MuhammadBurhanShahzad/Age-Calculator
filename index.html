@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium JavaScript Age Calculator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-image: linear-gradient(to bottom right, #6a11cb, #2575fc);
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    header {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      border-bottom: 2px solid #6a11cb;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    header h1 {
+      color: #333; /* Darker color for better visibility */
+      margin: 0;
+    }
+
+    header p {
+      color: #555; /* Slightly lighter shade for the subtitle */
+      margin: 5px 0 0;
+    }
+
+    footer {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-top: 2px solid #6a11cb;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      max-width: 500px;
+      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      margin: 20px auto;
+    }
+
+    h2 {
+      color: #333;
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    #birthdate {
+      padding: 12px;
+      margin: 15px 0;
+      border: 2px solid #6a11cb;
+      border-radius: 6px;
+      font-size: 18px;
+      font-family: 'Open Sans', sans-serif;
+      transition: border-color 0.3s;
+    }
+
+    #birthdate:focus {
+      border-color: #2575fc;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 15px 0;
+      background-color: #6a11cb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      font-family: 'Open Sans', sans-serif;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #2575fc;
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #age {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+      font-family: 'Open Sans', sans-serif;
+      color: #333;
+    }
+
+    .result-box {
+      background-color: #f7f7f7;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    footer p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Age Calculator</h1>
+    <p>Find out how old you really are!</p>
+  </header>
+
+  <div class="container">
+    <h2>Enter your birthdate:</h2>
+    <input id="birthdate" type="text" placeholder="Select Date">
+    <button onclick="startAgeCalculation()">Calculate</button>
+    <button onclick="reset()">Reset</button>
+
+    <div class="result-box">
+      <label for="age" id="age-label">Your Age:</label>
+      <p id="age"></p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2024 @Burhan Dot. All rights reserved.</p>
+    <p>Created with ❤️ by Muhammad Burhan Shahzad</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr("#birthdate", {
+      dateFormat: "Y-m-d"
+    });
+
+    let ageInterval;
+
+    function startAgeCalculation() {
+      const birthdate = new Date(document.getElementById("birthdate").value);
+      if (isNaN(birthdate)) {
+        alert("Please select a valid date.");
+        return;
+      }
+      
+      clearInterval(ageInterval);
+
+      ageInterval = setInterval(() => {
+        const now = new Date();
+        const totalSeconds = Math.floor((now - birthdate) / 1000);
+        const years = Math.floor(totalSeconds / (365.25 * 24 * 3600));
+        const months = Math.floor((totalSeconds % (365.25 * 24 * 3600)) / (30 * 24 * 3600));
+        const weeks = Math.floor((totalSeconds % (30 * 24 * 3600)) / (7 * 24 * 3600));
+        const days = Math.floor((totalSeconds % (7 * 24 * 3600)) / (24 * 3600));
+        const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+        const seconds = totalSeconds % 60;
+
+        document.getElementById("age").innerHTML = 
+          `You are ${years} years, ${months} months, ${weeks} weeks, ${days} days, ${hours} hours, and ${totalSeconds} seconds old.`;
+      }, 1000);
+    }
+
+    function reset() {
+      clearInterval(ageInterval);
+      document.getElementById("birthdate").value = "";
+      document.getElementById("age").innerHTML = "";
+    }
+  </script>
+</body>
+</html>
